@@ -1,0 +1,5 @@
+(define (pascal line col)
+  (cond ((or (= 1 line) (= col line) (= 1 col)) 1)
+        (else (+ (pascal (- line 1) col) (pascal (- line 1) (- col 1))))
+  )
+)

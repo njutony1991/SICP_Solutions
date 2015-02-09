@@ -1,0 +1,20 @@
+(load "1-43.scm")
+(load "1-40.scm")
+ 
+(define (sqrt-n num n)
+   (define (div i)
+     (if (= i 1)
+         (lambda (y) (/ num y))
+         (lambda (y) (/ (div (- i 1)) y))
+     )
+   )
+
+   (define (average-damp-n f i)
+     (if (or (= i 1) (= i 2))
+         (average-damp f)
+         (average-damp (average-damp-n f (- i 1)))
+     )
+   )
+
+   (fixed-point (average-damp-n (div n) n) 1)
+)

@@ -1,0 +1,43 @@
+(define (close-enough? v1 v2)
+    (< (abs (- v1 v2)) 0.000001)
+)
+
+(define (fixed-point f firstguess)
+  	(define (try guess step)
+      (display-info guess step)
+  	  (let ((next (f guess))) 
+  	  	(if (close-enough? guess next)
+  	  		   (begin 
+                (display-info next (+ 1 step))
+                next
+             )
+  	  		   (try next (+ step 1)) 
+  	  	)
+  	  )
+  	)
+  	(try firstguess 1)
+)
+
+(define (display-info guess step)
+  (display "Step: ")
+  (display step)
+  (display " ")
+  (display "Guess: ")
+  (display guess)
+  (newline)
+)
+
+(define (average-damp f)
+  (define (average a b)
+    (/ (+ a b) 2)
+  )
+  (lambda (x) 
+    (average x (f x))
+  )
+)
+
+(define formula
+  (lambda (x) 
+    (/ (log 1000) (log x))
+  )
+)

@@ -1,0 +1,6 @@
+(define (compose f g)
+  (lambda (x) (f (g x)))
+)
+(define (inc i)
+  (+ 1 i)
+)

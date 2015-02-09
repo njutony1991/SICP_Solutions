@@ -1,0 +1,11 @@
+(load "2-7.scm")
+(load "2-8.scm")
+
+(define (div-interval x y)
+  (if (>= 0 (* (lower-bound y) (upper-bound y)))
+      (error "Divison error (interval spans 0)" y)
+      (mul-interval x (make-interval (/ 1.0 (upper-bound y)) 
+      					             (/ 1.0 (lower-bound y)))
+  	  )
+  )
+)

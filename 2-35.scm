@@ -1,0 +1,16 @@
+(load "2-33.scm")
+(define (count-leaves tree)
+  (accumulate + 0 (map (lambda (subtree) 
+  								(cond ((null? subtree) 0)
+  									  ((not (pair? subtree)) 1)
+        							  (else  (count-leaves subtree)))) tree))
+)
+
+(define (count-leaves-new tree)
+  (accumulate (lambda (node count-thus-far) 
+  					  (+ count-thus-far
+  					  	 (cond ((null? node) 0)
+                               ((not (pair? node)) 1)
+                               (else (count-leaves-new node))
+                          ))) 0 tree)
+)
