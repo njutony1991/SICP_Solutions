@@ -6,7 +6,7 @@
         (list empty-board)
         (filter 
         	(lambda (positions) (safe? k positions))
-        	(flatmap
+        	(flat_map
         		(lambda (rest-of-queens)
         			(map (lambda (new-row)
         					(adjoin-position new-row k rest-of-queens))
@@ -20,10 +20,48 @@
   (queen-cols board-size)
 )
 
-(define (safe? parameters)
-  body)
+(define (find-first pred items)
+  (cond ((null? items) '())
+        ((pred (car items)) (car items))
+        (else (find-first pred (cdr items)))
+  )
+)
 
-(define (adjoin-position parameters)
-  body)
+(define (safe? col board)
+    (define (get-queen-by-col col board)
+      (find-first (lambda (queen) 
+                    (= (queen-col queen) col)) board)
+    )
+    (define the-queen (get-queen-by-col col board))
+    (let ((other-queens (filter (lambda (q) 
+                                (not (and (= (queen-col the-queen) (queen-col q))
+                                          (= (queen-row the-queen) (queen-row q)))
+                                )) board)))
+         (and (not (accumulate (lambda (p q) (or q (= (queen-row p) (queen-row the-queen))
+                                )) #f other-queens))
+              (not (accumulate (lambda (p q) (or q (= (abs (- (queen-row p) 
+                                                              (queen-row the-queen))) 
+                                                      (abs (- (queen-col p)
+                                                              (queen-col the-queen))))
+                                )) #f other-queens))
+         )
+    )
+)
 
-(define empty-board )
+(define (adjoin-position new-row k rest-of-queens)
+  (cons (place-queen new-row k) rest-of-queens)
+)
+
+(define empty-board '())
+
+(define (place-queen row col)
+  (cons col row)
+)
+
+(define (queen-row queen)
+  (cdr queen)
+)
+
+(define (queen-col queen)
+  (car queen)
+)

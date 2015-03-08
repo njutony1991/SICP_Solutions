@@ -1,0 +1,11 @@
+(define (split combine-main combine-small)
+  (lambda (painter n)
+  		(if (= n 0)
+  		    painter
+  		    (let ((smaller ((split combine-main combine-small) painter (- n 1))
+  		    	  ))
+  		    	(combine-main painter (combine-small smaller smaller))
+  		    )
+  		)
+  )
+)
