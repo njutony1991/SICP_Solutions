@@ -56,6 +56,7 @@
   )
 
   (define (negate-terms termlist)
+    (display "negate-terms\n")
     (if (empty-termlist? termlist)
         the-empty-termlist
         (let ((t1 (first-term termlist)))
@@ -78,13 +79,14 @@
         				   (mul (coeff t1) (coeff t2)))
         		(mul-term-by-all-terms t1 (rest-term l))))))
 
-  (define (add-poly p1 p2)
+    (define (add-poly p1 p2)
+     (display "add-poly\n")
      (if (same-variable? (variable p1) (variable p2))
            (make-poly (variable p1) (add-terms (termlist p1)
            									   (termlist p2)))
            (error "Poly not in same var -- ADD-POLY" (list p1 p2))))
 
-   (define (mul-poly p1 p2)
+    (define (mul-poly p1 p2)
       (if (same-variable? (variable p1) (variable p2))
            (make-poly (variable p1) (mul-terms (termlist p1)
            									   (termlist p2)))
@@ -93,20 +95,25 @@
     (define (tag p)
       (attach-tag 'polynomial p))
 
-    (put 'add '(polynomial polynomial) (lambda (p1 p2) (tag (add-poly p1 p2))))
+    (put 'add '(polynomial polynomial) (lambda (p1 p2) (begin (display "add in polynomial")
+                                                        (tag (add-poly p1 p2)))))
     (put 'mul '(polynomial polynomial) (lambda (p1 p2) (tag (mul-poly p1 p2))))
     (put 'zero=? '(polynomial) zero-poly?)
     (put 'make 'polynomial (lambda (var terms) (tag (make-poly var terms))))
-    (put 'negate '(polynomial) (lambda (poly) (make-polynomial (variable poly)
-    										  (negate-terms (termlist poly)))))
+    (put 'negate '(polynomial) (lambda (poly) (begin (display "negate in polynomial")
+                          (make-polynomial (variable poly)
+    										  (negate-terms (termlist poly))))))
 
-    (put 'sub '(polynomial polynomial) (lambda (p1 p2) (tag (add-poly p1 (negate p2)))))
+    (put 'sub '(polynomial polynomial) (lambda (p1 p2) (begin (display "sub in polynomial") 
+                                    (tag (add-poly p1 (contents (negate (tag p2))))))))
     
     'done
 )
 
 (define (make-polynomial var terms)
   ((get 'make 'polynomial) var terms))
+
+(define (negate x) (apply-generic 'negate x))
 
 (install-coercion-package)
 

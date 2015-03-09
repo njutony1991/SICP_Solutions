@@ -30,7 +30,8 @@
 
   (put 'add '(scheme-number scheme-number) (lambda (x y) (tag (+ x y))))
 
-  (put 'sub '(scheme-number scheme-number) (lambda (x y) (tag (- x y))))
+  (put 'sub '(scheme-number scheme-number) (lambda (x y) (begin (display "sub in scheme-number")
+                                           (tag (- x y)))))
 
   (put 'mul '(scheme-number scheme-number) (lambda (x y) (tag (* x y))))
 
@@ -43,7 +44,8 @@
 
   (put 'equ? '(scheme-number scheme-number) =)
 
-  (put 'negate '(scheme-number) (lambda (x) (tag (- n))))
+  (put 'negate '(scheme-number) (lambda (x) (begin (display "negate in scheme-number")
+                                  (tag (- x)))))
   'done
 )
 
@@ -130,7 +132,7 @@
 (define (div x y)
   (apply-generic 'div x y))
 
-(define (negate x) (apply-generic 'negate x))
+
 
 (define (apply-generic op . args)
   (define (true-map proc sequence)
