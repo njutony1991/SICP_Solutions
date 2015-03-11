@@ -1,0 +1,10 @@
+(define (make-monitored f)
+   (let ((num 0))
+   	 (define (fun x) (begin (set! num (+ num 1)) (f x)))
+   	 (define (dispatch op)
+   	   (cond ((equal? op 'how-many-calls) num)
+   	         (else (fun op)))
+   	 )
+   	 dispatch
+   )   
+)
